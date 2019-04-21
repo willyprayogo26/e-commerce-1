@@ -10,11 +10,11 @@ router.post('/registerAdmin', UserController.registerAdmin)
 router.post('/register', UserController.register)
 router.post('/login', UserController.login)
 router.post('/google-login', UserController.googleLogin)
+router.use('/carts', carts)
 
 router.use(isLogin)
 router.use('/users', users)
 router.use('/products', products)
-router.use('/carts', carts)
 router.use('/transactions', transactions)
 
 module.exports = router

@@ -1,10 +1,13 @@
 const router = require('express').Router()
 const { CartController } = require('../controllers')
-const { isAuthorizedUser, isAuthorizedAdmin } = require('../middlewares')
+const { isLogin, isAuthorizedUser, isAuthorizedAdmin } = require('../middlewares')
 
+router.post('/:userId', CartController.createCart)
+
+router.use(isLogin)
 router.get('/', isAuthorizedAdmin, CartController.getAllCart)
 router.get('/:id', isAuthorizedUser, CartController.getCartByUser)
-router.post('/:id', isAuthorizedUser, CartController.createCart)
-router.put('/:id', isAuthorizedUser, CartController.updateCart)
+router.patch('/add/:id', isAuthorizedUser, CartController.addProductToCart)
+router.patch('/delete/:id', isAuthorizedUser, CartController.deleteProductToCart)
 
 module.exports = router

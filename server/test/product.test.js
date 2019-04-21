@@ -200,10 +200,10 @@ describe('REGISTER PRODUCT TEST', function () {
                     done()
                 })
         })
-        it(`Should make sure that admin can't be register product if amount of product is 0 /products with POST request`, function (done) {
+        it(`Should make sure that admin can't be register product if amount of product is less than 0 /products with POST request`, function (done) {
             const product = {
                 name: 'Sepatu',
-                amount: 0,
+                amount: -1,
                 price: 1000000,
                 image: '',
             }
@@ -216,7 +216,7 @@ describe('REGISTER PRODUCT TEST', function () {
                 .end(function (err, res) {
                     res.body.should.to.be.an('object')
                     res.body.should.be.have.property('message')
-                    res.body.message.should.equal('Amount must be higher than 0')
+                    res.body.message.should.equal('Amount must be higher than equals 0')
                     res.should.have.status(400)
                     done()
                 })

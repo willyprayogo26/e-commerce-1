@@ -16,7 +16,7 @@ app.use(express.urlencoded({ extended: true }))
 
 app.use('/', routes)
 
-// MailerJob.start()
+MailerJob.start()
 
 app.listen(port, () => {
     console.log(`Listening on port: ${port}`)

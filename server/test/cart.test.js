@@ -132,25 +132,15 @@ describe('REGISTER PRODUCT FIRST', function () {
     })
 })
 
-describe('ADD PRODUCT TO CART', function () {
-    it('Should make sure that user can add product to cart /carts/:id with POST request', function (done) {
+describe('CREATE CART', function () {
+    it('Should make sure that user have one cart /carts/:id with POST request', function (done) {
         const product = {
-            product: [
-                {
-                    productId: idProduct,
-                    amount: 8
-                },
-                {
-                    productId: idProduct,
-                    amount: 5
-                }
-            ]
+            userId: idUser
         }
 
         chai
             .request(app)
             .post(`/carts/${idUser}`)
-            .set({ token: tokenUser })
             .send(product)
             .end(function (err, res) {
                 should.not.exist(err)
@@ -159,15 +149,43 @@ describe('ADD PRODUCT TO CART', function () {
                 res.body.should.have.property('_id')
                 res.body.should.have.property('product')
                 res.body.should.have.property('userId')
-                res.body.product[0].should.have.property('productId')
-                res.body.product[0].should.have.property('amount')
                 res.body.should.have.property('createdAt')
                 res.body.should.have.property('updatedAt')
                 res.body._id.should.to.be.a('string')
                 res.body.product.should.to.be.an('array')
                 res.body.userId.should.to.be.a('string')
-                res.body.product[0].productId.should.to.be.a('string')
-                res.body.product[0].amount.should.to.be.a('number')
+                res.body.createdAt.should.to.be.a('string')
+                res.body.updatedAt.should.to.be.a('string')
+                idCart = res.body._id
+                done()
+            })
+    })
+})
+
+describe('ADD PRODUCT TO CART', function () {
+    it('Should make sure that user can add product to cart /carts/add/:id with POST request', function (done) {
+        chai
+            .request(app)
+            .patch(`/carts/add/${idUser}`)
+            .set({ token: tokenUser })
+            .send({
+                product: {
+                    productId: idProduct,
+                    amount: 1
+                }
+            })
+            .end(function (err, res) {
+                should.not.exist(err)
+                res.should.have.status(201)
+                res.body.should.be.an('object')
+                res.body.should.have.property('_id')
+                res.body.should.have.property('product')
+                res.body.should.have.property('userId')
+                res.body.should.have.property('createdAt')
+                res.body.should.have.property('updatedAt')
+                res.body._id.should.to.be.a('string')
+                res.body.product.should.to.be.an('array')
+                res.body.userId.should.to.be.a('string')
                 res.body.createdAt.should.to.be.a('string')
                 res.body.updatedAt.should.to.be.a('string')
                 idCart = res.body._id
@@ -254,27 +272,16 @@ describe('GET CART BY USER TEST', () => {
     })
 })
 
-describe('PUT CART BY ID TEST', () => {
+describe('REMOVE PRODUCT FROM CART TEST', () => {
     describe('success', () => {
-        it(`Should make sure that user can update cart /carts/:id with PUT request`, function (done) {
-            const product = {
-                product: [
-                    {
-                        productId: idProduct,
-                        amount: 10
-                    },
-                    {
-                        productId: idProduct,
-                        amount: 2
-                    }
-                ]
-            }
-
+        it(`Should make sure that user can remove product from cart /carts/delete/:id with PUT request`, function (done) {
             chai
                 .request(app)
-                .put(`/carts/${idUser}`)
+                .patch(`/carts/delete/${idUser}`)
                 .set({ token: tokenUser })
-                .send(product)
+                .send({
+                    productId: idProduct
+                })
                 .end(function (err, res) {
                     should.not.exist(err)
                     res.should.have.status(200)

@@ -1,4 +1,5 @@
 const { Transaction } = require('../models')
+const { nodemailer } = require('../helpers')
 
 class TransactionController {
     static getAllTransaction (req, res) {
@@ -48,10 +49,24 @@ class TransactionController {
             deliverPrice: req.body.deliverPrice,
             totalPrice: req.body.totalPrice,
             status: 'pending',
-            userId: req.user.id,
-            adminId: req.body.adminId
+            userId: req.user.id
         })
         .then(transaction => {
+            return Transaction.findOne({
+                _id: transaction._id
+            })
+            .populate('product.productId')
+            .populate('userId')
+        })
+        .then(transaction => {
+            let message = `Thanks for buying from E-Commerly!\n`
+            transaction.product.forEach(e => {
+                message += `${e.productId.name}: ${e.amount} x ${e.productId.price}\n`
+            });
+            message += `Ongkir: Rp. 10,000\n`
+            message += `Total: ${(transaction.itemPrice + 10000).toLocaleString()}`
+    
+            nodemailer.Mailer(req.body.user.email, message)
             res.status(201).json(transaction)
         })
         .catch(err => {
@@ -69,10 +84,6 @@ class TransactionController {
         Transaction.findOneAndUpdate({
             _id: req.params.transactionId
         }, {
-            product: req.body.product,
-            itemPrice: req.body.itemPrice,
-            deliverPrice: req.body.deliverPrice,
-            totalPrice: req.body.totalPrice,
             status: req.body.status,
         }, {
             new: true

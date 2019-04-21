@@ -13,7 +13,7 @@ module.exports = {
         var mailOptions = {
             from: process.env.EMAIL,
             to: email,
-            subject: `Week information`,
+            subject: `Transaction information`,
             text: message
         };
 

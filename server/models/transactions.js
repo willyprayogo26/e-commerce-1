@@ -32,10 +32,6 @@ const transactionSchema = new Schema ({
     userId: {
         type: Schema.Types.ObjectId,
         ref: 'User'
-    },
-    adminId: {
-        type: Schema.Types.ObjectId,
-        ref: 'User'
     }
 }, {
     timestamps: {}

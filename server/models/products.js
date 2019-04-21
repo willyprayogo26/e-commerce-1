@@ -8,7 +8,7 @@ const productSchema = new Schema ({
     },
     amount: {
         type: Number,
-        min: [1, 'Amount must be higher than 0']
+        min: [0, 'Amount must be higher than equals 0']
     },
     price: {
         type: Number,

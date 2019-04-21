@@ -176,7 +176,11 @@ describe('CHECKOUT CART TO TRANSACTION', function () {
             itemPrice: 1000000,
             deliverPrice: 10000,
             totalPrice: 1010000,
-            adminId: idAdmin
+            user: {
+                _id: idUser,
+                name: 'willy5',
+                email: 'willy5@gmail.com',
+            }
         }
 
         chai
@@ -195,7 +199,6 @@ describe('CHECKOUT CART TO TRANSACTION', function () {
                 res.body.should.have.property('totalPrice')
                 res.body.should.have.property('status')
                 res.body.should.have.property('userId')
-                res.body.should.have.property('adminId')
                 res.body.should.have.property('createdAt')
                 res.body.should.have.property('updatedAt')
                 res.body.product[0].should.have.property('productId')
@@ -206,11 +209,10 @@ describe('CHECKOUT CART TO TRANSACTION', function () {
                 res.body.deliverPrice.should.to.be.a('number')
                 res.body.totalPrice.should.to.be.a('number')
                 res.body.status.should.to.be.a('string')
-                res.body.userId.should.to.be.a('string')
-                res.body.adminId.should.to.be.a('string')
+                res.body.userId.should.to.be.an('object')
                 res.body.createdAt.should.to.be.a('string')
                 res.body.updatedAt.should.to.be.a('string')
-                res.body.product[0].productId.should.to.be.a('string')
+                res.body.product[0].productId.should.to.be.an('object')
                 res.body.product[0].amount.should.to.be.a('number')
                 idTransaction = res.body._id
                 done()
@@ -236,7 +238,6 @@ describe('GET ALL TRANSACTION TEST', () => {
                     res.body[0].should.have.property('totalPrice')
                     res.body[0].should.have.property('status')
                     res.body[0].should.have.property('userId')
-                    res.body[0].should.have.property('adminId')
                     res.body[0].should.have.property('createdAt')
                     res.body[0].should.have.property('updatedAt')
                     res.body[0]._id.should.to.be.a('string')
@@ -246,7 +247,6 @@ describe('GET ALL TRANSACTION TEST', () => {
                     res.body[0].totalPrice.should.to.be.a('number')
                     res.body[0].status.should.to.be.a('string')
                     res.body[0].userId.should.to.be.an('object')
-                    res.body[0].adminId.should.to.be.a('string')
                     res.body[0].createdAt.should.to.be.a('string')
                     res.body[0].updatedAt.should.to.be.a('string')
                     res.body[0].product[0].productId.should.to.be.an('object')
@@ -291,7 +291,6 @@ describe('GET TRANSACTION BY USER TEST', () => {
                     res.body[0].should.have.property('totalPrice')
                     res.body[0].should.have.property('status')
                     res.body[0].should.have.property('userId')
-                    res.body[0].should.have.property('adminId')
                     res.body[0].should.have.property('createdAt')
                     res.body[0].should.have.property('updatedAt')
                     res.body[0]._id.should.to.be.a('string')
@@ -301,7 +300,6 @@ describe('GET TRANSACTION BY USER TEST', () => {
                     res.body[0].totalPrice.should.to.be.a('number')
                     res.body[0].status.should.to.be.a('string')
                     res.body[0].userId.should.to.be.an('object')
-                    res.body[0].adminId.should.to.be.a('string')
                     res.body[0].createdAt.should.to.be.a('string')
                     res.body[0].updatedAt.should.to.be.a('string')
                     res.body[0].product[0].productId.should.to.be.an('object')
@@ -330,7 +328,6 @@ describe('GET TRANSACTION BY ID TEST', () => {
                     res.body.should.have.property('totalPrice')
                     res.body.should.have.property('status')
                     res.body.should.have.property('userId')
-                    res.body.should.have.property('adminId')
                     res.body.should.have.property('createdAt')
                     res.body.should.have.property('updatedAt')
                     res.body._id.should.to.be.a('string')
@@ -340,7 +337,6 @@ describe('GET TRANSACTION BY ID TEST', () => {
                     res.body.totalPrice.should.to.be.a('number')
                     res.body.status.should.to.be.a('string')
                     res.body.userId.should.to.be.an('object')
-                    res.body.adminId.should.to.be.a('string')
                     res.body.createdAt.should.to.be.a('string')
                     res.body.updatedAt.should.to.be.a('string')
                     res.body.product[0].productId.should.to.be.an('object')
@@ -353,29 +349,14 @@ describe('GET TRANSACTION BY ID TEST', () => {
 
 describe('PUT TRANSACTION BY ID TEST', () => {
     describe('success', () => {
-        it(`Should make sure that just role === 'admin' can update transaction /transactions/:transactionId with PUT request`, function (done) {
-            const transaction = {
-                product: [
-                    {
-                        productId: idProduct,
-                        amount: 8
-                    },
-                    {
-                        productId: idProduct,
-                        amount: 5
-                    }
-                ],
-                itemPrice: 1000000,
-                deliverPrice: 10000,
-                totalPrice: 1010000,
-                status: 'send',
-            }
-
+        it(`Should make sure that user can update transaction status /transactions/:transactionId with PUT request`, function (done) {
             chai
                 .request(app)
-                .put(`/transactions/${idTransaction}`)
-                .set({ token: tokenAdmin })
-                .send(transaction)
+                .put(`/transactions/${idUser}/${idTransaction}`)
+                .set({ token: tokenUser })
+                .send({
+                    status: 'send'
+                })
                 .end(function (err, res) {
                     should.not.exist(err)
                     res.should.have.status(200)
@@ -387,7 +368,6 @@ describe('PUT TRANSACTION BY ID TEST', () => {
                     res.body.should.have.property('totalPrice')
                     res.body.should.have.property('status')
                     res.body.should.have.property('userId')
-                    res.body.should.have.property('adminId')
                     res.body.should.have.property('createdAt')
                     res.body.should.have.property('updatedAt')
                     res.body._id.should.to.be.a('string')
@@ -397,45 +377,10 @@ describe('PUT TRANSACTION BY ID TEST', () => {
                     res.body.totalPrice.should.to.be.a('number')
                     res.body.status.should.to.be.a('string')
                     res.body.userId.should.to.be.a('string')
-                    res.body.adminId.should.to.be.a('string')
                     res.body.createdAt.should.to.be.a('string')
                     res.body.updatedAt.should.to.be.a('string')
                     res.body.product[0].productId.should.to.be.a('string')
                     res.body.product[0].amount.should.to.be.a('number')
-                    done()
-                })
-        })
-    })
-
-    describe('failed', () => {
-        it(`Should make sure that role === 'user' cannot update transaction /transactions/:transactonId with PUT request`, function (done) {
-            const transaction = {
-                product: [
-                    {
-                        productId: idProduct,
-                        amount: 8
-                    },
-                    {
-                        productId: idProduct,
-                        amount: 5
-                    }
-                ],
-                itemPrice: 1000000,
-                deliverPrice: 10000,
-                totalPrice: 1010000,
-                status: 'send',
-            }
-
-            chai
-                .request(app)
-                .put(`/transactions/${idTransaction}`)
-                .set({ token: tokenUser })
-                .send(transaction)
-                .end(function (err, res) {
-                    res.body.should.to.be.an('object')
-                    res.body.should.be.have.property('message')
-                    res.body.message.should.equal('Unauthorized')
-                    res.should.have.status(401)
                     done()
                 })
         })
