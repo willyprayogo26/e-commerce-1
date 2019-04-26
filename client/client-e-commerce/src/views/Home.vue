@@ -19,62 +19,59 @@
 </template>
 
 <script>
-import Swal from 'sweetalert2';
-import axios from '@/api/axios';
-import AllProduct from '@/components/AllProduct.vue';
-import ProductDetails from '@/components/ProductDetail.vue';
+import Swal from "sweetalert2";
+import axios from "@/api/axios";
+import AllProduct from "@/components/AllProduct.vue";
+import ProductDetails from "@/components/ProductDetail.vue";
 
 export default {
-  props: ['isNew', 'isLogin'],
+  props: ["isNew", "isLogin"],
   components: {
     AllProduct,
-    ProductDetails,
+    ProductDetails
   },
   data() {
     return {
       products: [],
       product: {},
       id: null,
-      detail: false,
+      detail: false
     };
   },
   created() {
-    if (localStorage.getItem('token')) {
+    if (localStorage.getItem("token")) {
       this.getAllProduct();
       if (this.$route.params.id) {
         this.getDetails();
-        this.$emit('setNewToFalse')
+        this.$emit("setNewToFalse");
       }
     } else {
-      this.getAllProduct()
+      this.getAllProduct();
     }
   },
   watch: {
     isNew(newValue, oldValue) {
       if (newValue === true) {
-          this.getAllProduct();
+        this.getAllProduct();
       }
-    },
+    }
   },
   methods: {
     getAllProduct() {
       axios({
-        method: 'GET',
-        url: '/products',
-        headers: {
-          token: localStorage.getItem('token'),
-        },
+        method: "GET",
+        url: "/products"
       })
         .then(({ data }) => {
           this.products = data;
         })
-        .catch((err) => {
+        .catch(err => {
           Swal.fire({
             title: err.response.data.message,
             animation: false,
             customClass: {
-              popup: 'animated swing',
-            },
+              popup: "animated swing"
+            }
           });
         });
     },
@@ -84,50 +81,42 @@ export default {
       // }
       if (this.$route.params.id) {
         axios({
-          method: 'GET',
-          url: `/products/${localStorage.getItem('id')}/${
-            this.$route.params.id
-          }`,
-          headers: {
-            token: localStorage.getItem('token'),
-          },
+          method: "GET",
+          url: `/products/${this.$route.params.id}`
         })
           .then(({ data }) => {
             this.product = data;
             this.detail = true;
           })
-          .catch((err) => {
+          .catch(err => {
             Swal.fire({
               title: err.response.data.message,
               animation: false,
               customClass: {
-                popup: 'animated swing',
-              },
+                popup: "animated swing"
+              }
             });
           });
       } else {
         axios({
-          method: 'GET',
-          url: `/products/${localStorage.getItem('id')}/${product._id}`,
-          headers: {
-            token: localStorage.getItem('token'),
-          },
+          method: "GET",
+          url: `/products/${product._id}`
         })
           .then(({ data }) => {
             this.product = data;
             this.detail = true;
           })
-          .catch((err) => {
+          .catch(err => {
             Swal.fire({
               title: err.response.data.message,
               animation: false,
               customClass: {
-                popup: 'animated swing',
-              },
+                popup: "animated swing"
+              }
             });
           });
       }
-    },
-  },
+    }
+  }
 };
 </script>
