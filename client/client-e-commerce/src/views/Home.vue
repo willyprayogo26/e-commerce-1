@@ -10,6 +10,7 @@
         v-for="(product, index) in products"
         :key="index"
         :product="product"
+        :isLogin="isLogin"
         @get-all-product="getAllProduct"
         @get-details="getDetails"
       />
@@ -24,6 +25,7 @@ import AllProduct from '@/components/AllProduct.vue';
 import ProductDetails from '@/components/ProductDetail.vue';
 
 export default {
+  props: ['isNew', 'isLogin'],
   components: {
     AllProduct,
     ProductDetails,
@@ -41,8 +43,18 @@ export default {
       this.getAllProduct();
       if (this.$route.params.id) {
         this.getDetails();
+        this.$emit('setNewToFalse')
       }
+    } else {
+      this.getAllProduct()
     }
+  },
+  watch: {
+    isNew(newValue, oldValue) {
+      if (newValue === true) {
+          this.getAllProduct();
+      }
+    },
   },
   methods: {
     getAllProduct() {

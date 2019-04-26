@@ -1,9 +1,10 @@
 const router = require('express').Router()
 const { ProductController } = require('../controllers')
-const { isAuthorizedAdmin, isAuthorizedUser } = require('../middlewares')
+const { isLogin, isAuthorizedAdmin, isAuthorizedUser } = require('../middlewares')
 const { image } = require('../helpers')
 
 router.get('/', ProductController.getAllProduct)
+router.use(isLogin)
 router.get('/:id/:productId', isAuthorizedUser, ProductController.getProductById)
 router.post('/', isAuthorizedAdmin, image.multer.single('image'), image.sendUploadToGCS, ProductController.createProduct)
 router.put('/:productId', isAuthorizedAdmin, image.multer.single('image'), image.sendUploadToGCS, ProductController.updateProduct)

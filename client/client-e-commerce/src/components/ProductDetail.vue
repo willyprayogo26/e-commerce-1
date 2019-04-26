@@ -35,7 +35,7 @@ export default {
   },
   methods: {
     unShow() {
-      this.$router.push('/all-product');
+      this.$router.push('/');
       this.$emit('change-detail-state');
     },
   },

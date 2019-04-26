@@ -3,7 +3,7 @@
     <v-toolbar-title class="headline text-uppercase">
       <span>E-COMMERLY</span>
     </v-toolbar-title>
-    <v-btn to="/all-product" flat v-if="isLogin">
+    <v-btn to="/" flat v-if="isLogin">
       <span>All Product</span>
     </v-btn>
     <v-btn to="/all-transaction" flat v-if="isLogin">
@@ -77,7 +77,7 @@ export default {
   methods: {
     logout() {
       localStorage.clear();
-      this.$router.push('/login');
+      this.$router.push('/');
       this.$emit('change-is-login');
     },
     close() {
@@ -109,6 +109,7 @@ export default {
       })
         .then(({ data }) => {
           this.close();
+          this.$emit('get-all-product');
         })
         .catch((err) => {
           Swal.fire({

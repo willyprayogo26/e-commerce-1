@@ -1,10 +1,10 @@
 <template>
   <v-app>
-    <navbar @change-is-login="changeIsLogin" :isLogin="isLogin" :role="role"/>
+    <navbar @change-is-login="changeIsLogin" :isLogin="isLogin" :role="role" @get-all-product="isNew = true"/>
     <v-content>
       <!-- <RegisForm /> -->
       <!-- <HelloWorld/> -->
-      <router-view @change-is-login="changeIsLogin" :role="role" />
+      <router-view @change-is-login="changeIsLogin" :isLogin="isLogin" :role="role" :isNew="isNew" @setNewToFalse="isNew = false" />
     </v-content>
   </v-app>
 </template>
@@ -22,6 +22,7 @@ export default {
   data() {
     return {
       isLogin: false,
+      isNew: false,
       role: '',
     };
   },

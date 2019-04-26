@@ -54,3 +54,15 @@
 | /transactions/:id                | POST | Authenticated:<br />(token),<br />Authorized:<br />(check isUser) | product: Array<br />itemPrice: Number<br />deliverPrice: Number<br /><br />totalPrice: Number<br />user: {Object} | Create a transaction<br />success:<br />(201), example: {"product": Array, "itemPrice": Number, "deliverPrice": Number, "totalPrice": Number, "status": String, "userId": {ObjectId}}<br />errors:<br />(400), example: {"message": String}<br />(500), error |
 | /transactions/:id/:transactionId | PUT  | Authenticated:<br />(token)<br />Authorized:<br />(check isUser) | status: String                                               | Update a transaction status(pending, send, done)<br />success:<br />(200), example: {"product": Array, "itemPrice": Number, "deliverPrice": Number, "totalPrice": Number, "status": String, "userId": {ObjectId}}<br />errors:<br />(404), example: {message: 'Transaction not found'}<br />(500), error |
 
+
+
+### Link Deploy
+
+Server:
+
+<http://e-commerly-server.willyprayogo26.xyz/>
+
+
+
+Client:
+

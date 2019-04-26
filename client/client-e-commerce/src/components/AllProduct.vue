@@ -48,8 +48,9 @@
         </v-card>
       </v-dialog>
       <v-card-actions class="justify-center">
-        <v-btn v-if="role === 'user' && product.amount !== 0" flat @click="addToCart(product._id)">Add To Cart</v-btn>
-        <v-btn v-if="role === 'user' && product.amount === 0" disabled>Add To Cart</v-btn>
+        <v-btn v-if="role === 'user' && product.amount !== 0 && isLogin" flat @click="addToCart(product._id)">Add To Cart</v-btn>
+        <v-btn v-if="role === 'user' && product.amount === 0 && isLogin" disabled>Add To Cart</v-btn>
+        <v-btn v-if="!isLogin" disabled>Add To Cart</v-btn>
 
         <v-btn v-if="role === 'admin'" flat @click="showUpdateDetails(product)">Edit</v-btn>
         <v-btn v-if="role === 'admin'" flat @click="showDeleteConfirmation(product._id)">Delete</v-btn>
@@ -63,7 +64,7 @@ import Swal from 'sweetalert2';
 import axios from '../api/axios';
 
 export default {
-  props: ['product'],
+  props: ['product', 'isLogin'],
   name: 'AllProduct',
   data() {
     return {
@@ -214,7 +215,7 @@ export default {
         });
     },
     getDetails(product) {
-      this.$router.push(`/all-product/${product._id}`);
+      this.$router.push(`/product/${product._id}`);
       this.$emit('get-details', product);
     },
   },

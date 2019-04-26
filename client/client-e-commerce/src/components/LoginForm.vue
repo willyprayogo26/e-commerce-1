@@ -50,7 +50,7 @@ export default {
           localStorage.setItem('email', data.email);
           localStorage.setItem('role', data.role);
           localStorage.setItem('token', data.token);
-          this.$router.push('/all-product');
+          this.$router.push('/');
           this.$emit('change-is-login');
         })
         .catch((err) => {
